@@ -42,13 +42,14 @@ COQSRCLIBS:=-I $(COQLIB)/kernel -I $(COQLIB)/lib \
   -I $(COQLIB)/proofs -I $(COQLIB)/tactics \
   -I $(COQLIB)/toplevel \
   -I $(COQLIB)/plugins/cc \
-  -I $(COQLIB)/plugins/decl_mode \
   -I $(COQLIB)/plugins/dp \
   -I $(COQLIB)/plugins/extraction \
   -I $(COQLIB)/plugins/field \
   -I $(COQLIB)/plugins/firstorder \
   -I $(COQLIB)/plugins/fourier \
   -I $(COQLIB)/plugins/funind \
+  -I $(COQLIB)/plugins/groebner \
+  -I $(COQLIB)/plugins/interface \
   -I $(COQLIB)/plugins/micromega \
   -I $(COQLIB)/plugins/nsatz \
   -I $(COQLIB)/plugins/omega \
@@ -112,7 +113,7 @@ GFILES:=$(VFILES:.v=.g)
 HTMLFILES:=$(VFILES:.v=.html)
 GHTMLFILES:=$(VFILES:.v=.g.html)
 
-all: $(VOFILES) description
+all: $(VOFILES) 
 spec: $(VIFILES)
 
 gallina: $(GFILES)
@@ -139,22 +140,13 @@ all-gal.pdf: $(VFILES)
 
 
 
-###################
-#                 #
-# Subdirectories. #
-#                 #
-###################
-
-description:
-	cd description ; $(MAKE) all
-
 ####################
 #                  #
 # Special targets. #
 #                  #
 ####################
 
-.PHONY: all opt byte archclean clean install depend html description
+.PHONY: all opt byte archclean clean install depend html
 
 %.vo %.glob: %.v
 	$(COQC) $(COQDEBUG) $(COQFLAGS) $*
@@ -192,17 +184,14 @@ install:
 	 install -d `dirname $(COQLIB)/user-contrib/RegExp/$$i`; \
 	 install $$i $(COQLIB)/user-contrib/RegExp/$$i; \
 	 done)
-	(cd description; $(MAKE) INSTALLDEFAULTROOT=$(INSTALLDEFAULTROOT)/description install)
 
 clean:
 	rm -f $(CMOFILES) $(CMIFILES) $(CMXFILES) $(CMXSFILES) $(OFILES) $(VOFILES) $(VIFILES) $(GFILES) $(MLFILES:.ml=.cmo) $(MLFILES:.ml=.cmx) *~
 	rm -f all.ps all-gal.ps all.pdf all-gal.pdf all.glob $(VFILES:.v=.glob) $(HTMLFILES) $(GHTMLFILES) $(VFILES:.v=.tex) $(VFILES:.v=.g.tex) $(VFILES:.v=.v.d)
 	- rm -rf html
-	(cd description ; $(MAKE) clean)
 
 archclean:
 	rm -f *.cmx *.o
-	(cd description ; $(MAKE) archclean)
 
 
 printenv: 
@@ -214,7 +203,6 @@ Makefile: Make
 	mv -f Makefile Makefile.bak
 	$(COQBIN)coq_makefile -f Make -o Makefile
 
-	(cd description ; $(MAKE) Makefile)
 
 -include $(VFILES:.v=.v.d)
 .SECONDARY: $(VFILES:.v=.v.d)
