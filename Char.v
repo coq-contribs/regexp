@@ -6,6 +6,8 @@ Require Export RegExp.Definitions.
 Require Export RegExp.Boolean.
 Require Export RegExp.Concat.
 
+Unset Standard Proposition Elimination Names.
+
 (** ** [Char] *)
 
 Lemma Char_true : forall c, (Char c) ~== (String c ""%string).

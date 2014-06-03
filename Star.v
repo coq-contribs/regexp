@@ -9,6 +9,8 @@ Require Export RegExp.Definitions.
 Require Export RegExp.Boolean.
 Require Export RegExp.Concat.
 
+Unset Standard Proposition Elimination Names.
+
 (** ** Lemmas for Star *)
 
 Lemma matches_Star_EmptyString : forall r, (Star r) ~== EmptyString.
